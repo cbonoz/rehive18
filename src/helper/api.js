@@ -3,12 +3,16 @@ const library = (function () {
 
     const BASE_URL = "http://localhost:3001"
 
+    const getLastUpdated = () => {
+        return axios.get(`${BASE_URL}/lastupdated`);
+    }
     const getNodes = () => {
         return axios.get(`${BASE_URL}/nodes`);
     }
 
     return {
-        getNodes: getNodes
+        getNodes: getNodes,
+        getLastUpdated: getLastUpdated
     }
 
 })();
