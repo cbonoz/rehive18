@@ -136,7 +136,7 @@ class App extends Component {
                     const value = nodeInfo[key];
                     if (value instanceof Object) {
                       return <div key={keyIndex}><b>{key}:&nbsp;</b>
-                        <ol>
+                        <ul>
                           {Object.keys(value).map((valueKey, valIndex) => {
                             if (value[valueKey] instanceof Array) {
                               <ul>
@@ -145,10 +145,10 @@ class App extends Component {
                                 })}
                               </ul>
                             } else {
-                              return <li key={valIndex}>&nbsp;{JSON.stringify(value[valueKey])}</li>
+                              return <li key={valIndex}>{valueKey}: &nbsp;{JSON.stringify(value[valueKey])}</li>
                             }
                           })}
-                        </ol>
+                        </ul>
                       </div>
                     } else {
                       return <div key={keyIndex}><b>{key}:</b>{value}<br /></div>
