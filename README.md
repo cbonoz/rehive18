@@ -4,7 +4,8 @@
 </p>
 Stellar World
 ---
-Live Globe Visualization of Stellar Quorum sets.
+
+Live Globe Visualization of active Stellar Nodes and Quorum sets.
 
 Built as an extension and based on the data provided by <a href="stellarbeat.io">stellarbeat.io</a> - could possibly address  the Stellar Build Challenge (SBC) Task 1: Extending and Improving visualizations around qsets on the Stellar network.
 
