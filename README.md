@@ -44,4 +44,4 @@ Open `localhost:3000` from your favorite web browser with the server running to 
 <img src="screenshots/sw_2.png" width="600"/>
 
 ### Other Links:
-* https://www.stellarbeat.io/%  
+* https://www.stellarbeat.io
