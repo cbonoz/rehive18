@@ -85,3 +85,5 @@ On the safety front, ideally any group (regardless of its composition), can suff
 
 ### Other Links:
 * https://www.stellarbeat.io
+* https://medium.com/a-stellar-journey/on-worldwide-consensus-359e9eb3e949
+* https://www.stellar.org/developers/stellar-core/software/admin.html#crafting-a-quorum-set
