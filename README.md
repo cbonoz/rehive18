@@ -2,6 +2,7 @@
 <p align="center">
   <img src="./src/assets/stellar_world.png"/>
 </p>
+
 # Stellar World
 ---
 
