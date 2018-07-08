@@ -152,7 +152,7 @@ class App extends Component {
             </Row>
           </div>
           <Row className="show-grid">
-            <Col xs={12} md={12-mdGlobe}>
+            <Col xs={12} md={12 - mdGlobe}>
               {isNodeSelected && <Button bsStyle="danger" onClick={() => this.resetGlobe()}>Go Back</Button>}
               {!isNodeSelected && <div>
                 <h3><b>Locations Represented:</b></h3>
@@ -174,19 +174,20 @@ class App extends Component {
                   })}
 
                   <hr /><br />
-                  <b>More info: <br /><a href={`https://www.stellarbeat.io/nodes/${nodeInfo.publicKey}`} target="_blank">www.stellarbeat.io</a></b>
+                  <b>More info on this node: <br />
+                    <a href={`https://www.stellarbeat.io/nodes/${nodeInfo.publicKey}`} target="_blank">www.stellarbeat.io/{nodeInfo.publicKey}</a></b>
                   <br /><hr />
                 </div>
               }
 
-          </Col>
+            </Col>
             <Col xs={12} md={mdGlobe}>
               <Globe nodes={self.state.nodes} onSelectNode={self.onSelectNode} selectedNodes={self.state.selectedNodes} isNodeSelected={self.state.isNodeSelected} />
             </Col>
           </Row>
 
           <div className="info-section centered">
-          <hr/>
+            <hr />
             <a className="bottom-link" rel="noopener noreferrer" href="https://www.stellar.org/" target="_blank">Stellar</a>
             <a className="bottom-link" rel="noopener noreferrer" href="https://stellarscan.io/transactions" target="_blank">Stellarscan (Transactions)</a>
             <a className="bottom-link" rel="noopener noreferrer" href="https://www.stellarbeat.io/" target="_blank">Stellarbeat (Nodes)</a>
