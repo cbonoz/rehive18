@@ -28,13 +28,13 @@ class App extends Component {
 
     api.getLastUpdated().then(data => {
       const res = data.data;
-        self.setState({lastUpdated:res.updated});
+      self.setState({ lastUpdated: res.updated });
     });
 
     api.getNodes().then((data) => {
       const nodes = data.data;
       console.log('received ' + nodes.length + " nodes");
-      self.setState({nodes: nodes});
+      self.setState({ nodes: nodes });
     }).catch(err => {
       alert("Data could not be retrieved: " + err);
     })
@@ -47,12 +47,25 @@ class App extends Component {
     const nodes = self.state.nodes;
     const selectedNodes = [primaryNode];
     if (primaryNode.quorumSet) {
-      [...primaryNode.quorumSet.validators, ...primaryNode.quorumSet.innerQuorumSets].map((key) => {
+      [...primaryNode.quorumSet.validators].map((key) => {
         if (nodes.hasOwnProperty(key)) {
           selectedNodes.push(nodes[key]);
         }
       });
+
+      let innerQuorumSets = primaryNode.quorumSet.innerQuorumSets;
+      while (innerQuorumSets) {
+        if (innerQuorumSets.validators) {
+          innerQuorumSets.validators.map(key => {
+            if (nodes.hasOwnProperty(key)) {
+              selectedNodes.push(nodes[key]);
+            }
+          });
+        }
+        innerQuorumSets = innerQuorumSets.innerQuorumSets;
+      }
     }
+
     self.setState({
       nodeInfo: primaryNode,
       isNodeSelected: true,
@@ -70,15 +83,38 @@ class App extends Component {
     });
   }
 
+  recursivePrint(key, value, index) {
+    const self = this;
+    if (value instanceof Array) {
+      return <ul>{value.map((v, index) => {
+        return self.recursivePrint(key, v, index);
+      })}
+      </ul>
+    } else if (value instanceof Object) {
+      return <div><h5><b>&nbsp;-&nbsp;{self.capitalize(key)}&nbsp;-</b></h5><ul>{Object.keys(value).map((key, subIndex) => {
+        return self.recursivePrint(key, value[key], subIndex);
+      })}
+      </ul></div>
+    }
+
+    const capkey = self.capitalize(key);
+    return <div key={index}><b>{capkey}:&nbsp;</b>{value}<br /></div>
+  }
+
+  capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   render() {
     const self = this;
     const { lastUpdated, nodes, nodeInfo, isNodeSelected, selectedNodes } = self.state;
     const infoKeys = Object.keys(nodeInfo);
+    const mdGlobe = isNodeSelected ? 6 : 8;
 
     const locationMap = {};
     const nodeValues = Object.values(nodes);
     nodeValues.map(node => {
-      const loc = node.city || node.country;
+      const loc = node.location;
       if (loc) {
         if (!locationMap[loc]) {
           locationMap[loc] = 0;
@@ -98,80 +134,65 @@ class App extends Component {
             <Navbar.Toggle />
           </Navbar.Header>
           <Nav>
-    <NavItem eventKey={1} href="/home">
+            {/* <NavItem eventKey={1} href="/home">
       Node Map
     </NavItem>
     <NavItem eventKey={2} href="/about">
       About
-    </NavItem>
-  </Nav>
+    </NavItem> */}
+          </Nav>
         </Navbar>
         <Grid fluid style={{ paddingLeft: 100, paddingRight: 100 }}>
-        <div className="top-row">
+          <div className="top-row">
             <Row>
               <Col xs={12} md={12}>
                 <h3 className="centered"> Found <b>{Object.keys(nodes).length}</b> Stellar Nodes</h3>
-                <p className="centered"><i>Last Updated: <b>{lastUpdated}</b></i></p>
+                <p className="centered"><i>Last Updated: <b>{lastUpdated}</b> UTC</i></p>
               </Col>
             </Row>
           </div>
           <Row className="show-grid">
-            <Col xs={12} md={4}>
+            <Col xs={12} md={12-mdGlobe}>
               {isNodeSelected && <Button bsStyle="danger" onClick={() => this.resetGlobe()}>Go Back</Button>}
               {!isNodeSelected && <div>
-                <h3><b>Locations Represented</b></h3>
+                <h3><b>Locations Represented:</b></h3>
                 <ul>
-                {
-                  Object.keys(locationMap).sort().map((location, index) => {
-                    return <li key={index}><b>{location}</b> ({locationMap[location]})</li>;
-                  })
-                }
+                  {
+                    Object.keys(locationMap).sort(function (a, b) { return locationMap[b] - locationMap[a]; }).map((loc, index) => {
+                      return <li key={index}><b>{loc}</b> ({locationMap[loc]})</li>;
+                    })
+                  }
                 </ul>
-                </div>
+              </div>
               }
               {isNodeSelected &&
                 <div>
                   <h3><b>Selected Node:</b></h3>
                   {infoKeys.filter(key => nodeInfo[key]).map((key, keyIndex) => {
                     const value = nodeInfo[key];
-                    if (value instanceof Object) {
-                      return <div key={keyIndex}><b>{key}:&nbsp;</b>
-                        <ul>
-                          {Object.keys(value).map((valueKey, valIndex) => {
-                            if (value[valueKey] instanceof Array) {
-                              <ul>
-                                {value[valueKey].map((subValue, subKey) => {
-                                  <li key={subKey}>&nbsp;{JSON.stringify(subValue[subKey])}</li>
-                                })}
-                              </ul>
-                            } else {
-                              return <li key={valIndex}>{valueKey}: &nbsp;{JSON.stringify(value[valueKey])}</li>
-                            }
-                          })}
-                        </ul>
-                      </div>
-                    } else {
-                      return <div key={keyIndex}><b>{key}:</b>{value}<br /></div>
-                    }
-                  })} 
-                  <b>More info: <br/><a href={`https://www.stellarbeat.io/nodes/${nodeInfo.publicKey}`} target="_blank">Stellarbeat</a></b>
+                    return self.recursivePrint(key, value, keyIndex);
+                  })}
+
+                  <hr /><br />
+                  <b>More info: <br /><a href={`https://www.stellarbeat.io/nodes/${nodeInfo.publicKey}`} target="_blank">www.stellarbeat.io</a></b>
                   <br /><hr />
                 </div>
               }
 
-            </Col>
-            <Col xs={12} md={8}>
+          </Col>
+            <Col xs={12} md={mdGlobe}>
               <Globe nodes={self.state.nodes} onSelectNode={self.onSelectNode} selectedNodes={self.state.selectedNodes} isNodeSelected={self.state.isNodeSelected} />
             </Col>
           </Row>
 
           <div className="info-section centered">
+          <hr/>
             <a className="bottom-link" rel="noopener noreferrer" href="https://www.stellar.org/" target="_blank">Stellar</a>
-            <a className="bottom-link" rel="noopener noreferrer" href="https://stellarscan.io/transactions" target="_blank">Stellar Transactions</a>
-            <a className="bottom-link" rel="noopener noreferrer" href="https://www.stellarbeat.io/" target="_blank">Stellar Beat (Flatmaps)</a>
+            <a className="bottom-link" rel="noopener noreferrer" href="https://stellarscan.io/transactions" target="_blank">Stellarscan (Transactions)</a>
+            <a className="bottom-link" rel="noopener noreferrer" href="https://www.stellarbeat.io/" target="_blank">Stellarbeat (Nodes)</a>
           </div>
 
-          <div className="bottom-row"/>
+          <div className="bottom-row" />
         </Grid>
       </div>
     );

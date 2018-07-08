@@ -96,7 +96,8 @@ class Globe extends Component {
     // const shownNodes = [];
 
     const OFFSET = 50;
-    const MAG = 130;
+    // const MAG = 130;
+    const ROW_HEIGHT = 15;
 
     const annotationMap = {};
     const locationMap = {};
@@ -169,7 +170,7 @@ class Globe extends Component {
 
           <Annotations>
           {Object.keys(locationMap).map((loc, index) => {
-            const magY = Math.round((Math.random()*MAG) * 10) / 10 - OFFSET;
+            const magY = ((index % 10) * ROW_HEIGHT) - OFFSET;
             const magX = (index % 2 ? 1 : -1) * OFFSET;
             return <Annotation key={index} dx={ magX } dy={ magY } subject={ locationMap[loc] } strokeWidth={ 1 }>
               <text>

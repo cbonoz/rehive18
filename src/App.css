@@ -11,6 +11,10 @@
   border-bottom: 5px solid blue;
 }
 
+ul {
+  padding-left: 5px;
+}
+
 .top-row {
   padding-bottom: 25px;
 }
