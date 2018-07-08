@@ -37,5 +37,11 @@ The app should now be running on port 3000. <br/>
 
 Open `localhost:3000` from your favorite web browser with the server running to use.
 
-### Other Links
+### Screenshots:
+
+<img src="screenshots/sw_1.png" width="600"/>
+<hr/>
+<img src="screenshots/sw_2.png" width="600"/>
+
+### Other Links:
 * https://www.stellarbeat.io/%  
