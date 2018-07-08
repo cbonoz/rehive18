@@ -2,7 +2,7 @@
 <p align="center">
   <img src="./src/assets/stellar_world.png"/>
 </p>
-Stellar World
+# Stellar World
 ---
 
 Live Globe Visualization of active Stellar Nodes and Quorum sets.
