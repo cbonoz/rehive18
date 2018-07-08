@@ -69,9 +69,9 @@ Nodes are considered validating if they take part in SCP and sign messages pledg
 Picking thresholds
 Thresholds and groupings go hand in hand, and balance:
 
-liveness - network doesn’t halt when some nodes are missing (during maintenance for example)
+* liveness - network doesn’t halt when some nodes are missing (during maintenance for example)
 safety - resistance to bad votes, some nodes being more important (full validators) for the normal operation of the network
-Liveness pushes thresholds lower and safety pushes thresholds higher.
+* Liveness pushes thresholds lower and safety pushes thresholds higher.
 
 On the safety front, ideally any group (regardless of its composition), can suffer a 33% byzantine failure, but in some cases this is not practical and a different configuration needs to be picked.
 
@@ -79,7 +79,6 @@ It’s crucial to stage the changes to preserve quorum intersection and general 
 
 * removing too many nodes from your quorum set before the nodes are taken down : if different people remove different sets the remaining sets may not overlap between nodes and may cause network splits
 * adding too many nodes in your quorum set at the same time : if not done carefully can cause those nodes to overpower your configuration
-
 
 
 ### Demo Flow:
